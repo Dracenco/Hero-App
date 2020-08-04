@@ -1,5 +1,5 @@
 <?php
-require_once('Classes/Character.php');
+
 class Beast extends Character
 {
 
@@ -28,13 +28,16 @@ class Beast extends Character
 		$result = ['name'=>$this->getName()];
 
 		if ($this->luck >= rand(0,100)){
-			$result["result"] = "missed";
+			$result["result"] = "ratat lovitura";
 		}else {
-			$result["result"] = "success";
+			$result["result"] = "lovit cu succes";
 			$this->health -= $damage;
 		}
+
+		$opponentStrength > 100 ? $result['skills'] = 's-a folosit rapid strike' : $result['skills'] = 'nu s-a folosit nici o abilitate';
 		$result["health"] = $this->health;
 		$result["damage"] = $damage;
+
 		return $result;
 	}
 }

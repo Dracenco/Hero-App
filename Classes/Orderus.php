@@ -1,6 +1,6 @@
 <?php
-require_once('Classes/Character.php');
-class Orderus extends Character
+
+class Orderus extends Character implements AttackAbilities, DefenceAbilities
 {
 
 	public function __construct()
@@ -11,39 +11,45 @@ class Orderus extends Character
 		$this->speed = rand(40,50);
 		$this->luck = rand(10,30);
 	}
+
 	public function getName()
 	{
 		return 'Orderus';
 	}
 
-	private function rapidStrike()
-	{
-		return (rand(0,100) <= 10);
-	}
+    public function rapidStrike()
+    {
+        return (rand(0,100) <= 10);
+    }
+
+    public function magicShield()
+    {
+        return (rand(0,100) <= 20);
+    }
+
 	public function attack()
 	{
-		return $this->rapidStrike() ? $this->strength*2 : $this->strength;
+		return $this->rapidStrike() ? $this->strength * 2 : $this->strength;
 	}
 
-	private function magicShield()
-	{
-		return (rand(0,100) <= 20);
-	}
 	public function defend($opponentStrength)
 	{
-		$magicShield = $this->magicShield();
-		$damage = $opponentStrength - $this->defence;
-		$damage = ($magicShield ? $damage / 2 : $damage);
-		$result = ['name'=>$this->getName()];
 
-		if ($this->luck >= rand(0,100)){
-			$result['result'] ='missed';
+		$magicShield = $this->magicShield();
+        $damage = $opponentStrength - $this->defence;
+        $damage = ($magicShield ? $damage / 2 : $damage);
+        $result = ['name'=>$this->getName()];
+        $magicShield ? $result['skills'] = 's-a folosit magic shield' : $result['skills'] = 'nu s-a folosit nici o abilitate';
+        if ($this->luck >= rand(0,100)){
+			$result['result'] ='ratat lovitura';
 		}else {
-			$result["result"] = "success";
+			$result["result"] = "lovit cu succes";
 			$this->health -= $damage;
 		}
 		$result["health"] = $this->health;
 		$result["damage"] = $damage;
 		return $result;
 	}
+
+
 }

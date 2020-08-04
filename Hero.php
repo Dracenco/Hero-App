@@ -2,9 +2,7 @@
 
 use Symfony\Component\HttpFoundation\Response;
 
-require_once('Classes/Beast.php');
-require_once('Classes/Orderus.php');
-require_once('Classes/Character.php');
+require_once('autoloader/autoload.php');
 
 class Hero
 {
@@ -13,10 +11,8 @@ class Hero
 
 	public function __construct()
 	{
-		$beast = new \Beast();
-		$orderus = new \Orderus();
-		$this->beast = $beast;
-		$this->orderus = $orderus;
+		$this->beast = new \Beast();
+		$this->orderus = new \Orderus();
 	}
 
 
@@ -31,6 +27,8 @@ class Hero
 			$rounds [] = $this->round($players[$currentAttacker],$players[$currentDefender]);
 
 			if ($players[$currentDefender]->getHealth() <= 0){
+			    echo $players[$currentAttacker]->getName() . " A Castigat! <br><br>";
+			    echo "Dupa " . $i . " runde " . $players[$currentDefender]->getName() . " a fost invins. <br><br> Detaliile bataliei:<br> ";
 				break;
 			}
 			list($currentAttacker,$currentDefender) = array($currentDefender,$currentAttacker);
@@ -38,20 +36,16 @@ class Hero
 
 		foreach ($rounds as $round) {
 
-			vprintf(
-				"Se apara : %s, Oponentul ataca cu o putere de : %s, abilitati folosite: %s, viata ramasa :  %s <br>", [
-					$round['name'],
-					$round['damage'],
-					'skills',
-					$round['health']
-				]);
+            vprintf(
+                "<br> <br> Runda noua <br> ============ <br>Se apara : %s, <br> Oponentul ataca cu o putere de : %s,<br>  %s, <br> Oponentul a : %s,<br> viata ramasa :  %s <br> ============ <br> ", [
+                $round['name'],
+                $round['damage'],
+                $round['skills'],
+                $round['result'],
+                $round['health']
+            ]);
 
 		}
-	}
-
-	public function display()
-	{
-
 	}
 
 	public function firstAttack()
@@ -77,13 +71,10 @@ class Hero
 
 	public function round($attacker,$defender)
 	{
-		$strength = $attacker->attack();
-		return $defender->defend($strength);
+		return $defender->defend($attacker->attack());
 	}
 
-
-
-	/**
+	/**.
 	 * @return \Beast
 	 */
 	public function getBeast()
@@ -116,8 +107,7 @@ class Hero
 	}
 }
 
-$jocTest = new Hero();
-$primaRunda = $jocTest->play();
-echo "<pre>";
-var_dump($primaRunda);
+    $jocTest = new Hero();
+    $primaRunda = $jocTest->play();
+
 
